@@ -150,7 +150,8 @@ async function runChatCompletion(audio, messages, mp3File, voiceId) {
   }
 }
 
-function receiveAudio(aiText, randomAudioName, voiceId) {
+function receiveAudio(aiText, randomAudioName, voiceId, callback) {
+  console.log(callback == undefined)
   console.log(voiceId)
   console.log(!voiceId)
   if(!voiceId){
@@ -175,13 +176,21 @@ console.log(randomAudioName)
   return axios.post(url, payload, { headers, responseType: 'arraybuffer' })
     .then(response => {
       const audioContent = Buffer.from(response.data, 'binary');
+      if(callback == undefined){
       fs.writeFile(`public/audio/${randomAudioName}.mp3`, audioContent, 'binary', err => {
         if (err) {
           console.error('Error:', err);
         } else {
           console.log(`Audio received and saved as ${randomAudioName}`);
         }
-      });
+      })}else{
+        fs.writeFile(`public/audio/${randomAudioName}.mp3`, audioContent, 'binary',callback, err => {
+          if (err) {
+            console.error('Error:', err);
+          } else {
+            console.log(`Audio received and saved as ${randomAudioName}`);
+          }
+      })};
     // }
     })
     .catch(error => {
@@ -302,9 +311,24 @@ app.post("/api", (req, res) => {
 })
 
 app.post("/send-data", (req, res) => {
-  console.log(req.body)
-receiveAudio(req.body.entireResponse, req.body.divID, req.session.voice)
-})
+  console.log(req.body);
+  
+  // Assuming receiveAudio creates and writes the MP3 file
+  receiveAudio(req.body.entireResponse, req.body.divID, req.session.voice, (err) => {
+    if (err) {
+      // Handle the error, maybe send a response to the frontend to notify of the failure
+      return res.status(500).send({ error: 'Failed to create audio file.' });
+    }
+
+    // Send a success response (or some other data you might want to return)
+    res.send({ status: 'Audio created successfully.' });
+  });
+});
+// app.post("/send-data", (req, res) => {
+//   console.log(req.body)
+// receiveAudio(req.body.entireResponse, req.body.divID, req.session.voice)
+
+// })
 
 
 // This will run every day at 2:00 AM
