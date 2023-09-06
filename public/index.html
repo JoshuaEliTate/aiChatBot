@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="#">
   <link rel="stylesheet" type="text/css" href="./styles/styles.css">
 </head>
-<body style="display: block;  background: linear-gradient(#4671EA, #AC34E7);height: fit-content;min-height: 100vh;">
+<body style="display: block;  background: aliceblue;height: fit-content;min-height: 100vh;">
   <section style="min-width: 175px;max-width: 175px;border-right: solid;display: flex;flex-direction: column; margin: -10px -10px -8px; padding: 8px;background-color: #302f2f;position:fixed;height: -webkit-fill-available;">
     <button id="voicePageButton">Voice</button>
     <button id="chatPageButton">Text</button>
@@ -115,35 +115,23 @@
 
 function createMessageDiv(messageText, backgroundColor, messageType) {
     const div = document.createElement('div');
-    div.style.cssText = `margin: 5px; padding: 5px; background-color: ${backgroundColor}; display: flex; align-items: center; display: block;width: fit-content;max-width: 400px;border-radius:5px;`;
+    div.style.cssText = `margin: 5px; padding: 5px; display: flex; align-items: center; display: block;width: fit-content;max-width: 400px;align-self: end;border-radius:5px;overflow-wrap: anywhere;`;
 
     if (messageType === 'Server') {
-      div.style.cssText = `margin: 5px; padding: 5px; background-color: ${backgroundColor}; display: flex; align-items: center; display: block;width: fit-content;max-width: 400px;align-self: end;border-radius:5px;`
+      div.style.cssText = `margin: 5px; padding: 5px; display: flex; align-items: center; display: block;width: fit-content;max-width: 400px;border-radius:5px;overflow-wrap: anywhere;`
 
-        
-        // const btn = document.createElement('button');
-        // btn.innerText = 'Play Audio';
-
+    
     const span = document.createElement('span');
     span.innerText = `${messageText}`;
+    span.style.cssText = "padding: 10px;background-color: #3d3d3e;;border-radius: 10px 10px 10px 0px;color: white;display:flex;"
     div.appendChild(span);
 
     div.id = `msg-${Date.now()}`;
 
-
-
-        // btn.onclick = () => {
-          
-        //   const audioSrc = `/audio/${div.id}.mp3`
-        //     const audioElement = new Audio(audioSrc);
-
-        //       audioElement.play();
-
-        // };
-        // div.appendChild(btn);
     }else{
 
     const span = document.createElement('span');
+    span.style.cssText = "padding: 10px;background-color: #72727229;border-radius: 10px 10px 0px 10px; black;display:flex;"
     span.innerText = `${messageText}`;
     div.appendChild(span);
 
@@ -354,14 +342,17 @@ function createAudioForDiv(div) {
     const audio = document.createElement('audio');
     const audioSrc = `/audio/${div.id}.mp3`;
     audio.src = audioSrc;
-    
+    div2 = document.createElement('div')
+    div2.style.cssText = "display: flex;flex-wrap: nowrap;align-items: center;margin-top: 4px;width: fit-content;background-color: #7272724f;border-radius: 10px 10px 10px 0px;"
     const playPauseBtn = document.createElement('button');
-    playPauseBtn.innerText = 'Play/Pause';
-    
+    playPauseBtn.innerText = '▶';
+    playPauseBtn.style.cssText = "    margin-left: 5px;border-radius: 20px;width: 40px;height: 40px;"
     const canvas = document.createElement('canvas');
-    div.appendChild(audio);
-    div.appendChild(playPauseBtn);
-    div.appendChild(canvas);
+    canvas.style.cssText = "padding: 10px;;border-radius: 10px 10px 10px 0px;color: white;"
+    div2.appendChild(audio);
+    div2.appendChild(playPauseBtn);
+    let progressOverlay;
+
     const ctx = canvas.getContext('2d');
     
     let audioBuffer;
@@ -377,85 +368,121 @@ function createAudioForDiv(div) {
             drawWaveform();
         });
     
-    function drawWaveform() {
-        canvas.width = 400;
-        canvas.height = 100;
-        const step = Math.ceil(audioData.length / canvas.width);
-        const ampScale = canvas.height / 2;
-        for (let i = 0; i < canvas.width; i++) {
-        let min = 1.0;
-        let max = -1.0;
 
-        for (let j = 0; j < step; j++) {
-            const datum = audioData[(i * step) + j];
-            if (datum < min) min = datum;
-            if (datum > max) max = datum;
+        // const numOfBars = 40;
+        const numOfBars = 100; 
+
+        function drawWaveform() {
+          const numOfBars = 100;  // set number of bars you'd like to display
+          const spacing = 2;  // width of spacing in px
+          const samplesPerBar = Math.ceil(audioData.length / numOfBars);
+
+          const totalSpacing = (numOfBars - 1) * spacing;  // total width of all spacings
+          const availableWidth = canvas.width - totalSpacing;  // remaining width after all spacings
+          const barWidth = availableWidth / numOfBars;  // width of each bar
+          const ampScale = canvas.height / 2;
+
+          for (let i = 0; i < numOfBars; i++) {
+              let min = 1.0;
+              let max = -1.0;
+
+              for (let j = 0; j < samplesPerBar; j++) {
+                  const datum = audioData[(i * samplesPerBar) + j];
+                  if (datum < min) min = datum;
+                  if (datum > max) max = datum;
+              }
+
+              ctx.fillStyle = '#4a4a4a';  // Color for waveform
+              // The position is adjusted by adding the spacing (i * spacing) to it.
+              ctx.fillRect((i * barWidth) + (i * spacing), (1 + min) * ampScale, barWidth, Math.max(1, (max - min) * ampScale));
+          }
+                 const containerDiv = document.createElement('div');
+    containerDiv.style.position = 'relative'; // Required for correct overlay positioning
+
+    // Convert the canvas drawing to an image
+    const waveformImage = document.createElement('img');
+    waveformImage.src = canvas.toDataURL("image/png");
+    waveformImage.style.width = '250px'; 
+    waveformImage.style.height = '60px';
+    waveformImage.classList.add('waveformImage'); // Use class instead of ID for multiple elements
+
+    // Create a progress overlay div
+    progressOverlay = document.createElement('div');
+    progressOverlay.style.position = 'absolute';
+    progressOverlay.style.top = '0';
+    progressOverlay.style.left = '0';
+    progressOverlay.style.height = '100%';
+    progressOverlay.style.width = '0%';
+    progressOverlay.style.backgroundColor = '#c9ced3c4';
+    progressOverlay.style.pointerEvents = 'none';
+    progressOverlay.style.borderRadius = '10px';
+    progressOverlay.classList.add('progressOverlay');
+
+    // Append the waveform and progress overlay to the container
+
+
+
+    containerDiv.appendChild(waveformImage); // if you want to go back //above js and change the appendchild to canvas
+    containerDiv.appendChild(progressOverlay);
+    div2.appendChild(containerDiv);
+    div.appendChild(div2)
+
+    waveformImage.addEventListener('click', function(event) {
+        const rect = waveformImage.getBoundingClientRect();
+        const scaleX = waveformImage.width / rect.width;
+
+        // Calculate the exact position of the click relative to the image
+        const clickPosition = (event.clientX - rect.left) * scaleX; 
+
+        const clickPercentage = clickPosition / waveformImage.width;
+        audio.currentTime = clickPercentage * audio.duration;
+        console.log("Click Position:", clickPosition);
+        console.log("Click Percentage:", clickPercentage);
+        console.log("Audio Current Time:", audio.currentTime);
+
+        updatePlaybackProgressForMessage(progressOverlay, audio);
+    });
         }
 
-        ctx.fillStyle = '#AAA';  // Color for waveform
-        ctx.fillRect(i, (1 + min) * ampScale, 1, Math.max(1, (max - min) * ampScale));
-    }
-    }
+
     
     playPauseBtn.addEventListener('click', function() {
         if (audio.paused) {
             audio.play();
-            playPauseBtn.innerText = 'Pause';
-            updatePlaybackProgress();
+            playPauseBtn.innerText = '||';
+            updatePlaybackProgressForMessage(progressOverlay, audio);
         } else {
             audio.pause();
-            playPauseBtn.innerText = 'Play';
+            playPauseBtn.innerText = '▶';
         }
     });
+
+
+function togglePlayPause() {
+    if (audio.paused) {
+        audio.play();
+        playPauseBtn.innerText = '||';
+        updatePlaybackProgress();
+    } else {
+        audio.pause();
+        playPauseBtn.innerText = '▶';
+    }
+}
 
     audio.addEventListener('ended', function() {
-    playPauseBtn.innerText = 'Play';
+    playPauseBtn.innerText = '▶';
     });
-    
-    function updatePlaybackProgress() {
-        
+
+function updatePlaybackProgressForMessage(progressOverlay, audio) {
     if (audio.currentTime < audio.duration) {
-        const percentage = (audio.currentTime / audio.duration);
+        const percentage = (audio.currentTime / audio.duration) * 100;
 
-        // Clear previous progress and redraw the waveform
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawWaveform();
+        // Update the width of the specific progress overlay
+        progressOverlay.style.width = percentage + '%';
 
-        const step = Math.ceil(audioData.length / canvas.width);
-        const ampScale = canvas.height / 2;
-
-        // Draw progress only up to the waveform's amplitude
-        for (let i = 0; i < canvas.width * percentage; i++) {
-            let min = 1.0;
-            let max = -1.0;
-
-            for (let j = 0; j < step; j++) {
-                const datum = audioData[(i * step) + j];
-                if (datum < min) min = datum;
-                if (datum > max) max = datum;
-            }
-
-            ctx.fillStyle = '#007BFF';  // Color for progress
-            ctx.fillRect(i, (1 + min) * ampScale, 1, Math.max(1, (max - min) * ampScale));
-        }
-
-        requestAnimationFrame(updatePlaybackProgress);
+        requestAnimationFrame(() => updatePlaybackProgressForMessage(progressOverlay, audio));
     }
-    }
-
-    canvas.addEventListener('click', function(event) {
-        
-    const clickPosition = event.pageX - canvas.getBoundingClientRect().left;
-    const canvasWidth = canvas.width;
-    const clickPercentage = clickPosition / canvasWidth;
-    audio.currentTime = clickPercentage * audio.duration;
-    
-    // Update the progress bar immediately after setting the audio position
-    updatePlaybackProgress();
-    });
-
-    // Start the update loop
-    updatePlaybackProgress();
+}
 }
 
     })
