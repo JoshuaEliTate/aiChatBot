@@ -7,14 +7,24 @@ const ffmpeg = require('fluent-ffmpeg');
 const axios = require('axios');
 const session = require('express-session');
 let tokenAmount = 100
-// let messages = [ ];
 let aiPrompt = "you are an assistant"
-// let labsVoice = "rXXkqBiJdKlYp8wOIbM4"
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
 let clients = {};
 const cron = require('node-cron');
 const path = require('path');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // 'uploads/' is the directory where files will be saved
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname); // Get file extension
+    const name = path.basename(file.originalname, ext); // Get file name without extension
+    cb(null, `${name}-${Date.now()}${ext}`) // Append Date to filename to avoid overwriting and preserve extension
+  }
+});
+
+const upload2 = multer({ storage: storage });
 
 require('dotenv').config();
 
@@ -24,7 +34,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
+// const upload2 = multer({ dest: 'public/audio/' });
 const upload = multer({ dest: 'uploads/' });
 const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
 const openai = new OpenAIApi(configuration);
@@ -44,21 +54,63 @@ app.post('/chat', (req, res) => {
     
   if (!req.session.messages) {
       req.session.messages = [];
+      // req.session.messages.push({ role: "system", content: "You are a factual/conversation chatbot that is also sarcastic. never ask what you can help the user with" })
+      console.log('hello' + req.session.messages)
   }
 
   req.session.messages.push({ role: 'user', content: userInput });
+  console.log(req.session.messages)
   runText(userInput, req.session.messages, req); 
 
   res.sendStatus(200);
-  // const userInput = req.body.userInput;
-  // runText(userInput);
-  // res.sendStatus(200);
+
 });
 
-app.post('/upload', upload.single('file'), async (req, res) => {
+
+
+
+app.post('/phoneUpload', upload2.single('file'), async (req, res) => {
   if (!req.session.messages) {
     req.session.messages = [];
 }
+try {
+
+  
+  // Process the file here, and send response
+  const inputFilePath = req.file.path
+  console.log(`Received file ${req.file.originalname} saved as ${req.file.filename}`);
+  const resp = await openai.createTranscription(
+    fs.createReadStream(inputFilePath),
+    "whisper-1"
+  );
+  const transcription = resp.data.text;
+  console.log(transcription);
+  res.json({ transcription });
+} catch (error) {
+  console.error(error);
+  console.error('Error with OpenAI API:', error.message);
+  res.status(500).json({ error: 'Error transcribing audio' });
+}
+
+})
+
+
+
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  let fileFormat = ''
+  if (!req.session.messages) {
+    req.session.messages = [];
+} if (req.file.mimetype == 'audio/webm'){
+  fileFormat = 'webm'
+} else if(req.file.mimetype == 'audio/mp3') {
+  fileFormat = 'mp3'
+} else{
+  fileFormat = 'mp4'
+}
+console.log(fileFormat)
+console.log(req.file.mimetype)
+console.log('the file stuff for the users voice   ' + req.file.originalname)
   console.log('Received file', req.file);
   console.log(req.body.uniqueId)
   const inputFilePath = req.file.path;
@@ -67,7 +119,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   const voiceId = req.session.voice
     try {
         ffmpeg(inputFilePath)
-        .inputFormat('webm')
+        .inputFormat(`${fileFormat}`)
         .audioCodec('pcm_s16le')
         .format('wav')
           .on('end', async () => {
@@ -79,9 +131,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             );
             const transcription = resp.data.text;
             console.log(transcription);
-    
-            const aiResponse = await runChatCompletion(transcription, req.session.messages, mp3File, voiceId);
-            res.json({ aiResponse });
+            res.json({ transcription });
+            // const aiResponse = await runChatCompletion(transcription, req.session.messages, mp3File, voiceId);
+            // res.json({ aiResponse });
           })
           .on('error', err => {
             console.error('An error occurred: ' + err.message);
@@ -117,38 +169,6 @@ app.get('/events', (req, res) => {
     clients[sessionId] = clients[sessionId].filter(client => client !== res);
   });
 });
-
-
-
-async function runChatCompletion(audio, messages, mp3File, voiceId) {
-  const url = 'https://api.openai.com/v1/chat/completions';
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': process.env.OPENAI_AUTH
-  };
-  messages.push({ role: 'user', content: audio })
-  console.log(voiceId)
-
-  const data = {
-    model: 'gpt-3.5-turbo-16k-0613',
-    messages: messages,
-    max_tokens : tokenAmount,
-    temperature: 1
-  };
-
-  try {
-    const response = await axios.post(url, data, { headers });
-    const result = response.data;
-    const messageContent = result.choices[0].message.content;
-    console.log(messageContent);
-    messages.push({ role: 'assistant', content: messageContent });
-
-    const audioResponse = await receiveAudio(messageContent, mp3File, voiceId);
-    return audioResponse;
-  } catch (error) {
-    console.error('Error:', error.response.data);
-  }
-}
 
 function receiveAudio(aiText, randomAudioName, voiceId, callback) {
   console.log(callback == undefined)
@@ -194,7 +214,7 @@ console.log(randomAudioName)
     // }
     })
     .catch(error => {
-      console.error('Error:', error.response.status);
+      console.error('Error at audio creation:', error.response.status);
     });
 }
 
@@ -206,10 +226,10 @@ async function runText(userInput, messages, req) {
     'Authorization': process.env.OPENAI_AUTH,  // Replace with your API key
   };
 
-  messages.push({ role: 'user', content: userInput });
+  // messages.push({ role: 'user', content: userInput });
 
   const data = {
-    model: 'gpt-3.5-turbo-16k-0613',
+    model: 'ft:gpt-3.5-turbo-0613:care-life-services-inc::8DkolDMl',
     messages: messages,
     temperature: 1,
     stream: true,
@@ -310,6 +330,20 @@ app.post("/api", (req, res) => {
   });
 })
 
+
+
+app.post("/cacheClear", (req, res) => {
+  delete req.session.messages;
+  req.session.save(err => {
+    if (err) {
+      console.error('Error saving session:', err);
+      return res.status(500).send('Error clearing messages');
+    }
+    console.log('Messages cleared!');
+  });
+})
+
+
 app.post("/send-data", (req, res) => {
   console.log(req.body);
   
@@ -354,4 +388,10 @@ cron.schedule('0 2 * * *', function() {
           });
       });
   });
+});
+
+
+
+app.post("/phoneTest", (req, res) => {
+  console.log('it worked properly');
 });
