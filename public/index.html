@@ -6,13 +6,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="shortcut icon" href="#">
+  <link rel="stylesheet" type="text/css" href="./styles/chooseCharacter.css">
   <link rel="stylesheet" type="text/css" href="./styles/styles.css">
 </head>
 <body style="display: block;  background: aliceblue;height: fit-content;min-height: 100vh;">
+        <header class="light-grey flex">
+            <figure class="flex">
+                <!-- <img src="./img/IMG_2610.jpg" alt="A head picture of Josh Torres" width="100%"> -->
+                <h1 class="box center">SunFleur</h1>
+            </figure>
+            <nav class="spacing">
+                <a href="index.html">About</a>
+                <!-- <a href="#work">Main Page</a>
+                <a href="#contact">Contact Me</a> -->
+            </nav>
+        </header>
+ 
+        <main id="chooseCharacter">
+            <section class="Portfolio">
+                <div>
+                    <h1 class="head-color">AI ChatBot</h1>
+                </div>
+            </section>
+            <section class="flex black">
+                <!-- <div class="section padding" id="about">
+                    <h2 class="h2_border">About</h2>
+                    <div>
+                        <p>.</p>
+                    </div>
+                </div> -->
+            </section>
+                <div class="section padding" id="work">
+                    <h2 class="h2_border">Characters</h2>
+                    <section class="flex widthAdjustment">        
+                        <button id="butler" class="flex-item">
+                            <div>
+                            <h3>Butler</h3>
+                            <span>Assisting</span>
+                            </div>
+                        </button>
+                        
+                        <button id="dave" class="flex-item">
+                            <div>
+                            <h3>Dave</h3>
+                            <span>Serious</span>
+                            </div>
+                        </button>
+                        
+                        <button id="brock" class="flex-item">
+                            <div>
+                            <h3>Brock</h3>
+                            <span>Slow</span>
+                            </div>
+                        </button>
+                
+                        <button id="brandon" class="flex-item">
+                            <div>
+                            <h3>Brandon</h3>
+                            <span>Senile</span>
+                            </div>
+                        </button>
+                
+                        <button id="grump" class="flex-item">
+                            <div>
+                            <h3>Grump</h3>
+                            <span>Egotistical</span>
+                            </div>
+                        </button>
+                    </div>
+            </section>
+
+                </div>
+            </section>
+        </main>
+
+
+
+
+
+<section id="talkToAiPage" style="display: none;">
   <section class="settingButton">
-    <button id="settingsButton">Settings</button>
-    <section id="settings"style="display: none; flex-direction: column;">
-    <div>
+    <!-- <button id="settingsButton">Settings</button> -->
+    <!-- <section id="settings"style="display: none; flex-direction: column;"> -->
+    <!-- <div>
       <label for="voices" style="color:white">Choose A Voice:</label> 
       <br>
       <select name="voices" id="voices"> 
@@ -29,27 +105,44 @@
       <select name="chatPrompt" id="chatPrompt"> 
           <option value="Act sarcastic personable and human in your responses, dont do numbered lists">Sarcastic</option> 
           <option value="i want you to give me flirty responses that catch you off guard but arent corny or weird ">Smart</option> 
-          <!-- <option value="Act smart and sophisticated giving clear concise and human responses, dont do numbered lists">Smart</option>  -->
+
           <option value="Act funny and joking in your responses, be human as possible, dont do numbered lists">Funny</option> 
           <option value="Act very conversational making sure you continue the conversation in repsonses every so often, act as human as possible, dont do numbered lists. if the user doesnt ask a question, respond back as if its a human conversation, dont answer the last question asked a second time. act as human as possible and dont break character">Conversational</option> 
           <option value="Act rude in your repsonses, not caring for what the user says, dont do numbered lists">Rude</option> 
       </select>
-    </div>
+    </div> -->
     <!-- <label style="color:white"> Token Amount:<br><input type="number" min="25" max="300" class="tokenAmount" value="100"/></label> -->
     <!-- <label style="color:white">Chat Prompt:<input type="text" class="chatPrompt"/></label> -->
-    <button id="sendData">Send data</button>
-  </section>
-  <button id="clearCache"  style="margin-top: 15px;">Clear Cached Memory</button>
+    <!-- <button id="sendData">Send data</button> -->
+  <!-- </section> -->
+  <button id="backToHomePage"  style="background-color: #353535;color: aliceblue;">Back</button>
   </nav>
 </section>
 <section id="chatPage" class="chatPageCSS">
-  <div id="chatbox" class="chatBoxCSS">
+  <div id="chatboxOne" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h1>Butler</h1>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxTwo" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h1>Dave</h1>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxThree" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h1>Brock</h1>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxFour" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h1>Brandon</h1>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxFive" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h1>Grump</h1>
     <p id="chatContent" ></p>
   </div>
   <div class="wrapper">
-    <button id="chatRecordButton" class="button no-select">Hold To Record</button>
+    <button id="chatRecordButton" class="button no-select" style="font-size: small">Hold To Record</button>
     <textarea id="userInput" placeholder="Type Your Message" required></textarea>
-    <button id="sendText" class="no-select" style="width: 40px;">Send</button>
+    <button id="sendText" class="no-select sendButton">></button>
   </div>
 
   <!-- <div class="wrapper">
@@ -58,553 +151,8 @@
     <button id="sendText" style="width: 40px;">></button>
   </div> -->
 </section>
+</section>
 
 
-
-  <script>
-    // require('dotenv').config();
-
-    const sendTextButton = document.getElementById("sendText");
-    const chatbox = document.getElementById('chatbox');
-    const chatPage = document.getElementById('chatPage');
-    const textarea = document.querySelector("textarea")
-    const settingsButton = document.getElementById('settingsButton');
-    const settings = document.getElementById("settings")
-    const chatContent = document.getElementById('chatContent');
-    const userInput = document.getElementById('userInput');
-    const sendText = document.getElementById('sendText');
-    const chatRecordButton= document.querySelector('#chatRecordButton');
-    settings.style.display="none"
-    let dropdownList = document.getElementById('voices');
-    let chatPrompt = document.getElementById('chatPrompt');
-      dropdownList.onchange = (ev) =>{
-      console.log("Selected value is: " + dropdownList.value);
-    }
-    chatPrompt.onchange = (ev) =>{
-      console.log("Selected value is: " + chatPrompt.value);
-    }
-
-    let mediaRecorder;
-    let recordedChunks = [];
-    const btn = document.querySelector(".aiButton1");
-    var sendData=document.querySelector("#sendData");
-    var clearCache=document.querySelector("#clearCache");
-    var myTokens=document.querySelector(".tokenAmount");
-    // var chatPrompt=document.querySelector(".chatPrompt");
-    // var myCity=document.querySelector(".userCity");
-
-            textarea.addEventListener("keyup", e =>{
-        textarea.style.height= `60`
-        let scHeight = e.target.scrollHeight/2 +15;
-        textarea.style.height= `${scHeight}px`
-
-    })
-
-    settingsButton.addEventListener('click', async () => {
-      if(settings.style.display=="flex"){
-        console.log(settings.style.display)
-        settings.style.display="none"
-      }else {
-        settings.style.display="flex"
-      }
-      console.log("settings")
-    })
-
-
-
-function createMessageDiv(messageText, backgroundColor, messageType) {
-    const div = document.createElement('div');
-    div.style.cssText = `margin: 5px; padding: 5px; display: flex; align-items: center; display: block;width: fit-content;max-width: 400px;align-self: end;border-radius:5px;overflow-wrap: anywhere;`;
-    const ptag = document.createElement('p');
-    if (messageType === 'Server') {
-      div.style.cssText = `margin: 5px; padding: 5px; display: flex; align-items: center; display: block;width: fit-content;max-width: 400px;border-radius:5px;overflow-wrap: anywhere;`
-    const divAI = document.createElement('div')
-    ptag.innerText = 'AI'
-    ptag.style.cssText = 'margin: auto;'
-    divAI.style.cssText = `width: 40px;border-radius: 20px;height: 40px;position: absolute;margin-left: -45px;background-color: #c9ced3;display: inline-flex;`;
-    divAI.appendChild(ptag)
-    div.appendChild(divAI)
-    const span = document.createElement('span');
-    span.innerText = `${messageText}`;
-    span.style.cssText = "padding: 10px;background-color: #3d3d3e;;border-radius: 10px 10px 10px 0px;color: white;display:flex;"
-    div.appendChild(span);
-
-    div.id = `msg-${Date.now()}`;
-
-    }else{
-
-    const span = document.createElement('span');
-    span.style.cssText = "padding: 10px;background-color: #72727229;border-radius: 10px 10px 0px 10px; black;display:flex;"
-    span.innerText = `${messageText}`;
-    div.appendChild(span);
-
-    div.id = `msg-${Date.now()}`;
-    }
-    return div;
-}
-
-
-
-
-
-
-async function fetchAudioAfterProcessing(idToSend) {
-    try {
-        let response = await fetch(`/audio/${idToSend}.mp3`);
-        if (response.status === 404) {
-            // If not found, wait for a bit and try again
-            setTimeout(() => fetchAudioAfterProcessing(idToSend), 1000);
-        } else {
-            const audioElement = new Audio(`/audio/${idToSend}.mp3`);
-            audioElement.play();
-        }
-    } catch (error) {
-        console.error("Error fetching the MP3:", error);
-    }
-}
-
-
-
-function sendMessage() {
-    const message = userInput.value.trim();
-    
-    // Check if the message is not empty
-    if (message !== "") {
-      // Handle the message (you can add your logic here)
-      console.log("Message sent:", message);
-      scrollToLatestMessageWithDelay();
-      sendDataToChatGPT()
-      // Clear the textarea
-      userInput.value = "";
-    }
-  }
-
-  sendTextButton.addEventListener("click", sendMessage);
-
-  // Event listener for the "Enter" key press in the textarea
-  userInput.addEventListener("keydown", function (event) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault(); // Prevent the default behavior of the "Enter" key in a textarea
-      sendMessage(); // Call the sendMessage function
-    }
-  });
-
-
-
-
-
-// chatForm.addEventListener('submit', async()=>{
-//   scrollToLatestMessageWithDelay();
-//   sendDataToChatGPT()
-// })
-
-function scrollToLatestMessage() {
-    const desiredScrollTop = document.documentElement.scrollHeight - window.innerHeight + 200;
-    window.scrollTo(0, desiredScrollTop > 200 ? desiredScrollTop - 200 : 0);
-}
-
-function scrollToLatestMessageWithDelay() {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            scrollToLatestMessage();
-        });
-    });
-}
-
-
-async function sendDataToChatGPT(transcription) {
-  let message = ''
-  if(transcription){
-  message = transcription;
-  userInput.value = '';
-  }else {
-  
-  message = userInput.value;
-  userInput.value = '';
-  }
-  let randomBoolean = true
-
-
-  const userDiv = createMessageDiv(message, '#e6e6e6', 'You');
-  chatbox.appendChild(userDiv);
-  scrollToLatestMessageWithDelay();
-  
-  currentResponseDiv = null;  // Reset for the new conversation turn
-  
-  await fetch('/chat', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ userInput: message }),
-  });
-
-  const eventSource = new EventSource('/events');
-  
-
-
-
-  eventSource.onmessage = async (event) => {
-
-  if (event.data !== 'undefined') {
-    eventSource.addEventListener('end', async () => {
-      let entireResponse= ''
-      let idToSend= ''
-      if(randomBoolean == true){
-
-        entireResponse = currentResponseDiv.querySelector('span').innerText
-        idToSend = currentResponseDiv.id;
-        console.log(entireResponse)
-        console.log(idToSend)
-        randomBoolean = false
-        createAudioForDiv(currentResponseDiv);
-
-        eventSource.close();
-      }else{
-        eventSource.close();
-      }
-    });
-        if (!currentResponseDiv) {
-            currentResponseDiv = createMessageDiv('', '#f2f2f2', 'Server');
-            chatbox.appendChild(currentResponseDiv);
-        }
-
-        const span = currentResponseDiv.querySelector('span');
-        span.innerText += event.data;
-        scrollToLatestMessageWithDelay();
-    }
-};
-
-  eventSource.onerror = (error) => {
-    console.error('EventSource failed:', error);
-    eventSource.close();
-  };
-};
-
-clearCache.addEventListener("click",()=>{
-  alert("All previous messages have been deleted from storage")
-  fetch("/cacheClear",{
-  method:"POST"
-  })
-                    // .then((r)=>r.json()).then((response)=>console.log(response));
-    
-})
-
-    sendData.addEventListener("click",()=>{
-                
-                var obj={
-                        voice: dropdownList.value,
-                        // tokens:myTokens.value,
-                        prompt:chatPrompt.value,
-                        // city:myCity.value
-                    };
-                    fetch("/api",{
-                    method:"POST",
-                    headers:{
-                        "Content-type":"application/json"
-                    },
-                    body:JSON.stringify(obj)
-                    })
-                    // .then((r)=>r.json()).then((response)=>console.log(response));
-    
-                })
-
-
-
-
-function generateUniqueId() {
-    return `${Date.now()}`;
-}
-
-
-
-
-chatRecordButton.addEventListener('touchstart', async (event) => {
-  if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices.getUserMedia) {
-  alert('MediaRecorder or getUserMedia is not supported on this browser. Please use a different browser.');
-  return;
-}
-
-  event.preventDefault
-  recordedChunks = [];
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true }) 
-  mediaRecorder = new MediaRecorder(stream);
-  
-  mediaRecorder.ondataavailable = (e) => {
-    mimeTypeText = `${mediaRecorder.mimeType}`
-    recordedChunks.push(e.data);
-  };
-
-  mediaRecorder.start();
-});
-
-chatRecordButton.addEventListener('touchend', () => {
-  if(!mediaRecorder){
-    console.log("couldnt recieve the user voice")
-  }else {
-
-  // alert(mediaRecorder.mimeType)
-
-  mediaRecorder.onstop = async () => {
-    const audioBlob = new Blob(recordedChunks);
-    const uniqueId = generateUniqueId();
-    console.log(audioBlob)
-    const formData = new FormData();
-    formData.append('file', audioBlob, 'recording.mp4');
-    formData.append('uniqueId', uniqueId);
-
-    try {
-      const response = await fetch(`/upload`, { method: 'POST', body: formData });
-      const data = await response.json();
-      console.log(data.transcription)
-      sendDataToChatGPT(data.transcription)
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
-  };
-
-  mediaRecorder.stop();}
-});
-
-
-
-
-
-chatRecordButton.addEventListener('mousedown', async (event) => {
-  if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices.getUserMedia) {
-  alert('MediaRecorder or getUserMedia is not supported on this browser. Please use a different browser.');
-  return;
-}
-
-  // Start recording logic
-  event.preventDefault
-  recordedChunks = [];
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  mediaRecorder = new MediaRecorder(stream, {mimeType: 'audio/webm;codecs=opus'});
-
-  mediaRecorder.ondataavailable = (e) => {
-    recordedChunks.push(e.data);
-    console.log(e.data.type)
-  };
-
-  mediaRecorder.start();
-});
-
-chatRecordButton.addEventListener('mouseup', () => {
-  if(!mediaRecorder){
-    console.log("couldnt recieve the user voice")
-  }else {
-
-  console.log(mediaRecorder)
-
-  mediaRecorder.onstop = async () => {
-    const audioBlob = new Blob(recordedChunks, { 'type' : 'audio/webm;codecs=opus' });
-    const uniqueId = generateUniqueId();
-
-    const formData = new FormData();
-    formData.append('file', audioBlob, 'recording.webm');
-    formData.append('uniqueId', uniqueId);
-
-    try {
-      const response = await fetch(`/upload`, { method: 'POST', body: formData });
-      const data = await response.json();
-      console.log(data.transcription)
-      sendDataToChatGPT(data.transcription)
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
-  };
-
-  mediaRecorder.stop();}
-});
-
-function createAudioForDiv(div) {
-    const entireResponse = div.querySelector('span').innerText;
-    const idToSend = div.id;
-
-    let div2 = document.createElement('div')
-    div2.style.cssText = "display: flex;flex-wrap: nowrap;align-items: center;margin-top: 4px;width: fit-content;background-color: #7272724f;border-radius: 10px 10px 10px 0px;width:295px;height:64px;"
-    const playPauseBtn = document.createElement('button');
-
-    // playPauseBtn.style.cssText = "    margin-left: 5px;border-radius: 20px;width: 40px;height: 40px;-webkit-text-stroke-width: medium;"
-    const canvas = document.createElement('canvas');
-    canvas.style.cssText = "padding: 10px;;border-radius: 10px 10px 10px 0px;color: white;"
-    div2.appendChild(playPauseBtn);
-    playPauseBtn.classList.add("playPauseBtn");
-    playPauseBtn.classList.add("playPauseBtn--loading");
-    div.appendChild(div2)
-    scrollToLatestMessageWithDelay();
-
-
-    fetch('/send-data', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-            entireResponse: entireResponse,
-            divID: idToSend 
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 'Audio created successfully.') {
-        
-    const audio = document.createElement('audio');
-    const audioSrc = `/audio/${div.id}.mp3`;
-    audio.src = audioSrc;
-    div2.appendChild(audio);
-
-    let progressOverlay;
-
-    const ctx = canvas.getContext('2d');
-    
-    let audioBuffer;
-    let audioData;
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
-    fetch(audioSrc)
-        .then(response => response.arrayBuffer())
-        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-        .then(buffer => {
-            audioBuffer = buffer;
-            audioData = buffer.getChannelData(0);
-            drawWaveform();
-        });
-    
-
-        // const numOfBars = 40;
-        const numOfBars = 100; 
-
-        function drawWaveform() {
-          const numOfBars = 100;  // set number of bars you'd like to display
-          const spacing = 2;  // width of spacing in px
-          const samplesPerBar = Math.ceil(audioData.length / numOfBars);
-
-          const totalSpacing = (numOfBars - 1) * spacing;  // total width of all spacings
-          const availableWidth = canvas.width - totalSpacing;  // remaining width after all spacings
-          const barWidth = availableWidth / numOfBars;  // width of each bar
-          const ampScale = canvas.height / 2;
-
-          for (let i = 0; i < numOfBars; i++) {
-              let min = 1.0;
-              let max = -1.0;
-
-              for (let j = 0; j < samplesPerBar; j++) {
-                  const datum = audioData[(i * samplesPerBar) + j];
-                  if (datum < min) min = datum;
-                  if (datum > max) max = datum;
-              }
-
-              ctx.fillStyle = '#4a4a4a';  // Color for waveform
-              // The position is adjusted by adding the spacing (i * spacing) to it.
-              ctx.fillRect((i * barWidth) + (i * spacing), (1 + min) * ampScale, barWidth, Math.max(1, (max - min) * ampScale));
-          }
-    const containerDiv = document.createElement('div');
-    containerDiv.style.position = 'relative'; // Required for correct overlay positioning
-
-    // Convert the canvas drawing to an image
-    const waveformImage = document.createElement('img');
-    waveformImage.src = canvas.toDataURL("image/png");
-    waveformImage.style.width = '240px'; 
-    waveformImage.style.height = '60px';
-    waveformImage.classList.add('waveformImage'); // Use class instead of ID for multiple elements
-
-    // Create a progress overlay div
-    progressOverlay = document.createElement('div');
-    progressOverlay.style.position = 'absolute';
-    progressOverlay.style.top = '0';
-    progressOverlay.style.left = '0';
-    progressOverlay.style.height = '100%';
-    progressOverlay.style.width = '0%';
-    progressOverlay.style.backgroundColor = '#c9ced3c4';
-    progressOverlay.style.pointerEvents = 'none';
-    progressOverlay.style.borderRadius = '10px';
-    progressOverlay.classList.add('progressOverlay');
-    playPauseBtn.innerText = '▶';
-
-    // Append the waveform and progress overlay to the container
-    playPauseBtn.classList.remove("playPauseBtn--loading")
-    setTimeout(function(){
-      audio.play();
-      playPauseBtn.innerText = '||';
-      updatePlaybackProgressForMessage(progressOverlay, audio);
-    },500)
-
-
-
-    containerDiv.appendChild(waveformImage); // if you want to go back //above js and change the appendchild to canvas
-    containerDiv.appendChild(progressOverlay);
-    div2.appendChild(containerDiv);
-    
-
-    waveformImage.addEventListener('click', function(event) {
-        const rect = waveformImage.getBoundingClientRect();
-        const scaleX = waveformImage.width / rect.width;
-
-        // Calculate the exact position of the click relative to the image
-        const clickPosition = (event.clientX - rect.left) * scaleX; 
-
-        const clickPercentage = clickPosition / waveformImage.width;
-        audio.currentTime = clickPercentage * audio.duration;
-        console.log("Click Position:", clickPosition);
-        console.log("Click Percentage:", clickPercentage);
-        console.log("Audio Current Time:", audio.currentTime);
-
-        updatePlaybackProgressForMessage(progressOverlay, audio);
-    });
-        }
-
-
-    
-    playPauseBtn.addEventListener('click', function() {
-        if (audio.paused) {
-            audio.play();
-            playPauseBtn.innerText = '||';
-            updatePlaybackProgressForMessage(progressOverlay, audio);
-        } else {
-            audio.pause();
-            playPauseBtn.innerText = '▶';
-        }
-    });
-
-
-function togglePlayPause() {
-    if (audio.paused) {
-        audio.play();
-        playPauseBtn.innerText = '||';
-        updatePlaybackProgress();
-    } else {
-        audio.pause();
-        playPauseBtn.innerText = '▶';
-        // updatePlaybackProgress();
-    }
-}
-
-    audio.addEventListener('ended', function() {
-    playPauseBtn.innerText = '▶';
-    });
-
-function updatePlaybackProgressForMessage(progressOverlay, audio) {
-  console.log(!audio.paused)
-    if (audio.currentTime < audio.duration) {
-        const percentage = (audio.currentTime / audio.duration) * 100;
-
-        // Update the width of the specific progress overlay
-        progressOverlay.style.width = percentage + '%';
-      if(!audio.paused){
-        requestAnimationFrame(() => updatePlaybackProgressForMessage(progressOverlay, audio))
-      }
-
-
-    }
-}
-}
-
-    })
-    .catch(error => {
-        console.error('There was an error posting the message:', error);
-    });
-}
-  </script>
+  <script src="./js/script.js"></script>
 </body>

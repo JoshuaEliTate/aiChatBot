@@ -24,6 +24,14 @@ const storage = multer.diskStorage({
   }
 });
 
+const messagesPageMap = {
+  discovery: "messages1", // Replace with the actual value
+  dave: "messages2", // Replace with the actual value
+  brock: "messages3", // Replace with the actual value
+  brandon: "messages4", // Replace with the actual value
+  oldMan: "messages5", // Replace with the actual value
+};
+let messagesPage = messagesPageMap['discovery'] || "defaultMessagesPage";
 const upload2 = multer({ storage: storage });
 
 require('dotenv').config();
@@ -51,16 +59,18 @@ app.use(session({
 }));
 app.post('/chat', (req, res) => {
   const userInput = req.body.userInput;
-    
-  if (!req.session.messages) {
-      req.session.messages = [];
+  const voiceValue = req.body.voiceValue 
+  messagesPage = messagesPageMap[voiceValue] || "defaultMessagesPage";
+  if (!req.session[messagesPage]) {
+      req.session[messagesPage] = [];
       // req.session.messages.push({ role: "system", content: "You are a factual/conversation chatbot that is also sarcastic. never ask what you can help the user with" })
-      console.log('hello' + req.session.messages)
+      // console.log('hello' + req.session[messagesPage])
   }
 
-  req.session.messages.push({ role: 'user', content: userInput });
-  console.log(req.session.messages)
-  runText(userInput, req.session.messages, req); 
+  req.session[messagesPage].push({ role: 'user', content: userInput });
+  // console.log(characterPage)
+  // console.log(req.session[messagesPage])
+  runText(userInput, req.session[messagesPage], req); 
 
   res.sendStatus(200);
 
@@ -69,38 +79,40 @@ app.post('/chat', (req, res) => {
 
 
 
-app.post('/phoneUpload', upload2.single('file'), async (req, res) => {
-  if (!req.session.messages) {
-    req.session.messages = [];
-}
-try {
+// app.post('/phoneUpload', upload2.single('file'), async (req, res) => {
+//   if (!req.session.messages) {
+//     req.session.messages = [];
+// }
+// try {
 
   
-  // Process the file here, and send response
-  const inputFilePath = req.file.path
-  console.log(`Received file ${req.file.originalname} saved as ${req.file.filename}`);
-  const resp = await openai.createTranscription(
-    fs.createReadStream(inputFilePath),
-    "whisper-1"
-  );
-  const transcription = resp.data.text;
-  console.log(transcription);
-  res.json({ transcription });
-} catch (error) {
-  console.error(error);
-  console.error('Error with OpenAI API:', error.message);
-  res.status(500).json({ error: 'Error transcribing audio' });
-}
+//   // Process the file here, and send response
+//   const inputFilePath = req.file.path
+//   console.log(`Received file ${req.file.originalname} saved as ${req.file.filename}`);
+//   const resp = await openai.createTranscription(
+//     fs.createReadStream(inputFilePath),
+//     "whisper-1"
+//   );
+//   const transcription = resp.data.text;
+//   console.log(transcription);
+//   res.json({ transcription });
+// } catch (error) {
+//   console.error(error);
+//   console.error('Error with OpenAI API:', error.message);
+//   res.status(500).json({ error: 'Error transcribing audio' });
+// }
 
-})
+// })
 
 
 
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   let fileFormat = ''
-  if (!req.session.messages) {
-    req.session.messages = [];
+  voiceValue = req.body.voiceValue
+  messagesPage = messagesPageMap[voiceValue] || "defaultMessagesPage";
+  if (!req.session[messagesPage]) {
+    req.session[messagesPage] = [];
 } if (req.file.mimetype == 'audio/webm'){
   fileFormat = 'webm'
 } else if(req.file.mimetype == 'audio/mp3') {
@@ -108,11 +120,11 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 } else{
   fileFormat = 'mp4'
 }
-console.log(fileFormat)
-console.log(req.file.mimetype)
-console.log('the file stuff for the users voice   ' + req.file.originalname)
-  console.log('Received file', req.file);
-  console.log(req.body.uniqueId)
+// console.log(fileFormat)
+// console.log(req.file.mimetype)
+// console.log('the file stuff for the users voice   ' + req.file.originalname)
+//   console.log('Received file', req.file);
+//   console.log(req.body.uniqueId)
   const inputFilePath = req.file.path;
   const outputFilePath = req.file.path + '.wav';
   const mp3File= req.body.uniqueId
@@ -123,14 +135,14 @@ console.log('the file stuff for the users voice   ' + req.file.originalname)
         .audioCodec('pcm_s16le')
         .format('wav')
           .on('end', async () => {
-            console.log('File has been converted.');
+            // console.log('File has been converted.');
     
             const resp = await openai.createTranscription(
               fs.createReadStream(outputFilePath),
               "whisper-1"
             );
             const transcription = resp.data.text;
-            console.log(transcription);
+            // console.log(transcription);
             res.json({ transcription });
             // const aiResponse = await runChatCompletion(transcription, req.session.messages, mp3File, voiceId);
             // res.json({ aiResponse });
@@ -192,7 +204,7 @@ function receiveAudio(aiText, randomAudioName, voiceId, callback) {
       "similarity_boost": 0
     }
   };
-console.log(randomAudioName)
+// console.log(randomAudioName)
   return axios.post(url, payload, { headers, responseType: 'arraybuffer' })
     .then(response => {
       const audioContent = Buffer.from(response.data, 'binary');
@@ -218,7 +230,6 @@ console.log(randomAudioName)
     });
 }
 
-
 async function runText(userInput, messages, req) {
   const url = 'https://api.openai.com/v1/chat/completions';
   const headers = {
@@ -229,7 +240,7 @@ async function runText(userInput, messages, req) {
   // messages.push({ role: 'user', content: userInput });
 
   const data = {
-    model: 'ft:gpt-3.5-turbo-0613:care-life-services-inc::8DkolDMl',
+    model: 'gpt-3.5-turbo-16k-0613',
     messages: messages,
     temperature: 1,
     stream: true,
@@ -242,6 +253,7 @@ async function runText(userInput, messages, req) {
     });
 
     res.data.on('data', data => {
+      console.log('Received data:', data.toString());
       const lines = data.toString().split('\n').filter(line => line.trim() !== '');
       const sessionId = req.sessionID; // obtain the session ID from request
       const userClients = clients[sessionId];
@@ -254,14 +266,27 @@ async function runText(userInput, messages, req) {
           })
           return; 
         }
+        let content;
         try {
           const parsed = JSON.parse(message);
-          const content = parsed.choices[0].delta.content;
+          if (parsed.choices && parsed.choices[0].delta && parsed.choices[0].delta.content) {
+            content = parsed.choices[0].delta.content;
+          }
+          // const content = parsed.choices[0].delta.content;
+          // userClients.forEach(client => {
+          //   client.write(`data: ${content}\n\n`);
+          // });
+        } catch (error) {
+          console.error('Could not JSON parse stream message', message, error);
+          const match = message.match(/"content":"([^"]+)"/);
+          if (match) {
+            content = match[1];
+          }
+        }
+        if (content) {
           userClients.forEach(client => {
             client.write(`data: ${content}\n\n`);
           });
-        } catch (error) {
-          console.error('Could not JSON parse stream message', message, error);
         }
       }
     });
@@ -289,29 +314,41 @@ app.get("/", (req, res) => {
 })
 
 app.post("/api", (req, res) => {
-  if (!req.session.messages) {
-    req.session.messages = [];
-    req.session.voice = "rXXkqBiJdKlYp8wOIbM4";
-}
+  // voiceValue = req.body.voiceValue
+  // messagesPage = `messages${voiceValue}`
+
+
   chosenVoice = req.body.voice
   tokenAmount = parseInt(req.body.tokens)
   aiPrompt = req.body.prompt
   
+
+  
+  // Use the object to get the messagesPage value
+  messagesPage = messagesPageMap[chosenVoice] || "discovery";
+  // console.log(messagesPage)
+  if (!req.session[messagesPage]) {
+    req.session[messagesPage] = [];
+    req.session.voice = "ZQe5CZNOzWyzPSCn5a3c";
+}
+
+
+
   if(chosenVoice == "discovery"){
-    req.session.voice = "rXXkqBiJdKlYp8wOIbM4"
-    req.session.messages.push({"role": "system", "content": aiPrompt})
+    req.session.voice = "ZQe5CZNOzWyzPSCn5a3c"
+    req.session[messagesPage].push({"role": "system", "content": aiPrompt})
   } else if (chosenVoice == "dave"){
-    req.session.voice = "pNInz6obpgDQGcFmaJgB"
-    req.session.messages.push({"role": "system", "content": aiPrompt})
-  } else if (chosenVoice == "hannah"){
-    req.session.voice = "21m00Tcm4TlvDq8ikWAM"
-    req.session.messages.push({"role": "system", "content": aiPrompt})
-  } else if (chosenVoice == "sam"){
-    req.session.voice = "rhtRSG7Rhld2ATYPoZqE"
-    req.session.messages.push({"role": "system", "content": aiPrompt})
+    req.session.voice = "X2lHyfeNs30YNJBzIXYQ"
+    req.session[messagesPage].push({"role": "system", "content": aiPrompt})
+  } else if (chosenVoice == "brock"){
+    req.session.voice = "34OUhgtptnyUZQzpySED"
+    req.session[messagesPage].push({"role": "system", "content": "i want you to respond to the user as if you are barack obama. do not break character"})
+  } else if (chosenVoice == "brandon"){
+    req.session.voice = "YiSNFXgXXPhLn2tENa1R"
+    req.session[messagesPage].push({"role": "system", "content": "i want you to respond to the user as if you are joe biden, as his senile self. do not break character"})
   } else if (chosenVoice == "oldMan"){
-    req.session.voice = "yj1DgNOwhkbtB0N7oP5B"
-    req.session.messages.push({"role": "system", "content": "i want you to respond to the user as if you are donald trump, dont say tremendous every sentence. do not break character"})
+    req.session.voice = "l4xcIvq1eDzZKwkamxfM"
+    req.session[messagesPage].push({"role": "system", "content": "i want you to respond to the user as if you are donald trump, dont say tremendous every sentence. do not break character"})
   }
 
   
@@ -320,9 +357,9 @@ app.post("/api", (req, res) => {
   if (tokenAmount < 25) tokenAmount = 25;
   if (tokenAmount > 300) tokenAmount = 300;
  
-  console.log(chosenVoice)
-  console.log(tokenAmount);
-  console.log(aiPrompt)
+  // console.log(chosenVoice)
+  // console.log(tokenAmount);
+  // console.log(aiPrompt)
 
 
   res.json({
@@ -333,7 +370,7 @@ app.post("/api", (req, res) => {
 
 
 app.post("/cacheClear", (req, res) => {
-  delete req.session.messages;
+  delete req.session[messagesPage];
   req.session.save(err => {
     if (err) {
       console.error('Error saving session:', err);
@@ -345,7 +382,7 @@ app.post("/cacheClear", (req, res) => {
 
 
 app.post("/send-data", (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   
   // Assuming receiveAudio creates and writes the MP3 file
   receiveAudio(req.body.entireResponse, req.body.divID, req.session.voice, (err) => {
