@@ -307,7 +307,9 @@ setInterval(() => {
 }, 1000 * 60 * 30);
 
 
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+app.listen(port, () => {
+console.log(`Server listening on port ${port}`)
+});
 
 app.use(express.json());
 
