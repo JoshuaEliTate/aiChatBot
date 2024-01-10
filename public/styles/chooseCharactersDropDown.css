@@ -1,0 +1,86 @@
+/* Style for the dropdown button */
+.dropbtn {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+    text-decoration: none;
+    margin: 0px 60px 5px 40px;
+    /* height: 100%; */
+    padding: 0;
+    background-color:transparent;
+    color: #b1b1b1;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    display: none;
+}
+
+/* Style for the dropdown content (hidden by default) */
+/* .dropdown-content {
+    display: block;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+} */
+
+/* Style for the dropdown button when hovering over the container */
+/* .dropdown:hover .dropdown-content {
+    display: block;
+} */
+
+/* Style for the dropdown content (hidden by default) */
+.dropdown-content {
+    display: block;
+    background-color: #333; /* Dark background color for the dropdown */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Style for each dropdown item */
+.dropdown-content button {
+    background-color: #333; /* Dark background color */
+    color: #fff; /* Text color */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Style for each dropdown item when hovering */
+.dropdown-content button:hover {
+    background-color: #555; /* Slightly lighter background color on hover */
+    transform: scale(1.05); /* Scale up the button on hover */
+}
+
+/* Button content styles */
+.dropdown-content button div {
+    text-align: center;
+}
+
+.dropdown-content button h4 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.dropdown-content button span {
+    font-size: 14px;
+    opacity: 0.7; /* Reduced opacity for the span text */
+}
+
+@media screen and (max-width: 650px) {
+ .dropbtn{
+    display: block;
+ }
+ .dropdown-content{
+    display: none;
+    position: absolute;
+ }
+}

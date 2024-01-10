@@ -1,3 +1,9 @@
+body{
+  font-family: serif, sans-serif, Verdana, Geneva, Tahoma, ;
+}
+
+
+
 .button {
   align-self: center;
   text-align: center;
@@ -74,7 +80,7 @@
 .chatBoxCSS {
   display: flex;
   width: 75%;
-  padding: 0 5.5% 125px 5%;
+  padding: 45 5.5% 125px 5%;
   flex-direction: column;
 }
 
@@ -148,9 +154,10 @@ textarea::-webkit-scrollbar{
   
 .chatPageCSS {
   width: -webkit-fill-available;
-  /* padding-left: 250px; */
+  padding-left: 100px;
   display: flex;
     justify-content: space-around;
+    padding-bottom: 150px;
 }
 
   .aiButton1--loading .aiButton1__text {
@@ -173,6 +180,8 @@ textarea::-webkit-scrollbar{
     border-radius: 50%;
     animation: button-loading-spinner 1s ease infinite;
   }
+
+
   
   @keyframes button-loading-spinner {
     from {
@@ -243,8 +252,8 @@ textarea::-webkit-scrollbar{
       width: auto;
     }
     .chatBoxCSS {
-      padding: 5px 5.5% 125px 5%;
-      width: auto;
+      padding: 20px 5.5% 125px 5%;
+      /* width: auto; */
 
     }
   }

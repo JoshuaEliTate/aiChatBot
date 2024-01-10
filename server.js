@@ -109,11 +109,13 @@ app.post('/chat', (req, res) => {
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   let fileFormat = ''
+  console.log(req.file.mimetype)
   voiceValue = req.body.voiceValue
   messagesPage = messagesPageMap[voiceValue] || "defaultMessagesPage";
   if (!req.session[messagesPage]) {
     req.session[messagesPage] = [];
-} if (req.file.mimetype == 'audio/webm'){
+} 
+if (req.file.mimetype == 'audio/webm'){
   fileFormat = 'webm'
 } else if(req.file.mimetype == 'audio/mp3') {
   fileFormat = 'mp3'
@@ -135,14 +137,14 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         .audioCodec('pcm_s16le')
         .format('wav')
           .on('end', async () => {
-            // console.log('File has been converted.');
+            console.log('File has been converted.');
     
             const resp = await openai.createTranscription(
               fs.createReadStream(outputFilePath),
               "whisper-1"
             );
             const transcription = resp.data.text;
-            // console.log(transcription);
+            console.log(transcription);
             res.json({ transcription });
             // const aiResponse = await runChatCompletion(transcription, req.session.messages, mp3File, voiceId);
             // res.json({ aiResponse });
@@ -204,7 +206,7 @@ function receiveAudio(aiText, randomAudioName, voiceId, callback) {
       "similarity_boost": 0
     }
   };
-// console.log(randomAudioName)
+console.log(randomAudioName)
   return axios.post(url, payload, { headers, responseType: 'arraybuffer' })
     .then(response => {
       const audioContent = Buffer.from(response.data, 'binary');
@@ -226,7 +228,7 @@ function receiveAudio(aiText, randomAudioName, voiceId, callback) {
     // }
     })
     .catch(error => {
-      console.error('Error at audio creation:', error.response.status);
+      console.error('Error at audio creation:', error);
     });
 }
 
@@ -311,6 +313,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
     res.sendFile("./public/index.html", { root: __dirname });
+    res.sendFile("./public/talkToAiPage.html", { root: __dirname });
 })
 
 app.post("/api", (req, res) => {
@@ -338,7 +341,7 @@ app.post("/api", (req, res) => {
     req.session.voice = "ZQe5CZNOzWyzPSCn5a3c"
     req.session[messagesPage].push({"role": "system", "content": aiPrompt})
   } else if (chosenVoice == "dave"){
-    req.session.voice = "X2lHyfeNs30YNJBzIXYQ"
+    req.session.voice = "2xAA8Mq7kKsLu073Lzth"
     req.session[messagesPage].push({"role": "system", "content": aiPrompt})
   } else if (chosenVoice == "brock"){
     req.session.voice = "34OUhgtptnyUZQzpySED"
@@ -394,6 +397,7 @@ app.post("/send-data", (req, res) => {
     // Send a success response (or some other data you might want to return)
     res.send({ status: 'Audio created successfully.' });
   });
+  console.log("audio Created")
 });
 // app.post("/send-data", (req, res) => {
 //   console.log(req.body)
@@ -403,29 +407,29 @@ app.post("/send-data", (req, res) => {
 
 
 // This will run every day at 2:00 AM
-cron.schedule('0 2 * * *', function() {
-  const directoryPath = path.join(__dirname, 'public/audio');
-  const expirationTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+// cron.schedule('0 2 * * *', function() {
+//   const directoryPath = path.join(__dirname, 'public/audio');
+//   const expirationTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-  fs.readdir(directoryPath, (err, files) => {
-      if (err) return console.log('Unable to scan directory: ' + err);
+//   fs.readdir(directoryPath, (err, files) => {
+//       if (err) return console.log('Unable to scan directory: ' + err);
 
-      files.forEach(file => {
-          fs.stat(path.join(directoryPath, file), (err, stat) => {
-              if (err) return console.error(err);
+//       files.forEach(file => {
+//           fs.stat(path.join(directoryPath, file), (err, stat) => {
+//               if (err) return console.error(err);
 
-              const now = new Date().getTime();
-              const endTime = new Date(stat.ctime).getTime() + expirationTime;
-              if (now > endTime) {
-                  fs.unlink(path.join(directoryPath, file), err => {
-                      if (err) return console.error(err);
-                      console.log(`Deleted: ${file}`);
-                  });
-              }
-          });
-      });
-  });
-});
+//               const now = new Date().getTime();
+//               const endTime = new Date(stat.ctime).getTime() + expirationTime;
+//               if (now > endTime) {
+//                   fs.unlink(path.join(directoryPath, file), err => {
+//                       if (err) return console.error(err);
+//                       console.log(`Deleted: ${file}`);
+//                   });
+//               }
+//           });
+//       });
+//   });
+// });
 
 
 

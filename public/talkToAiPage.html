@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Audio Recorder</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="#">
+  <link rel="stylesheet" type="text/css" href="./styles/chooseCharacter.css">
+  <link rel="stylesheet" type="text/css" href="./styles/styles.css">
+  <link rel="stylesheet" type="text/css" href="./styles/Contact.css">
+  <link rel="stylesheet" type="text/css" href="./styles/chooseCharactersDropDown.css">
+</head>
+<body style="display: block;  background-color: rgb(18 19 21);;height: fit-content;min-height: 100vh;">
+    
+
+          <header id="chatHeader" class="light-grey flex2 chatHeader positionFixed2">
+          
+            <figure class="flex">
+                <!-- <img src="./img/IMG_2610.jpg" alt="A head picture of Josh Torres" width="100%"> -->
+                <h2 class="box center">SunFleur</h2>
+            </figure>
+            <nav class="spacing2">
+              <a href="index.html">Home</a>
+
+                <div class="dropdown dropStyle">
+                    <button class="dropbtn" id="dropDownButton">Characters</button>
+                    <div class="dropdown-content" id="characterList">
+                        <button class="butler">
+                            <div>
+                                <h4>Butler</h4>
+                                <span>Assisting</span>
+                            </div>
+                        </button>
+                        <button class="dave">
+                            <div>
+                                <h4>Dave</h4>
+                                <span>Serious</span>
+                            </div>
+                        </button>
+                        <button class="brock">
+                            <div>
+                                <h4>Brock</h4>
+                                <span>Slow</span>
+                            </div>
+                        </button>
+                        <button class="brandon">
+                            <div>
+                                <h4>Brandon</h4>
+                                <span>Senile</span>
+                            </div>
+                        </button>
+                        <button class="grump">
+                            <div>
+                                <h4>Grump</h4>
+                                <span>Egotistical</span>
+                            </div>
+                        </button>
+                    </div>
+                  </div>
+
+                <!-- <a href="#work">Main Page</a>
+                <a href="#contact">Contact Me</a> -->
+            </nav>
+        </header>
+
+ 
+    
+<section id="talkToAiPage">
+  <section class="settingButton">
+  <button id="backToHomePage"  style="background-color: #353535;color: aliceblue;">Back</button>
+  </nav>
+</section>
+<section id="chatPage" class="chatPageCSS">
+  <div id="chatboxOne" class="chatBoxCSS">
+    <div style="">
+      <p style="font-size: larger;">Butler</p>
+      <p style="font-size: medium;">Assisting</p>
+    </div>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxTwo" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h2>Dave</h2>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxThree" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h2>Brock</h2>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxFour" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h2>Brandon</h2>
+    <p id="chatContent" ></p>
+  </div>
+  <div id="chatboxFive" class="chatBoxCSS" style="display: none; text-align: -webkit-center;">
+    <h2>Grump</h2>
+    <p id="chatContent" ></p>
+  </div>
+  
+  <div class="wrapper">
+    <button id="chatRecordButton" class="button no-select" style="font-size: small">Hold To Record</button>
+    <textarea id="userInput" placeholder="Type Your Message" required></textarea>
+    <button id="sendText" class="no-select sendButton">></button>
+    <!-- <button id="voiceToVoiceButton" class="button no-select" style="font-size: small">Voice to Voice</button> -->
+  </div>
+
+  <!-- <div class="wrapper">
+    <button id="chatRecordButton" class="button">Hold To Record</button>
+    <textarea id="userInput" placeholder="Type Your Message" required></textarea>
+    <button id="sendText" style="width: 40px;">></button>
+  </div> -->
+</section>
+</section>
+
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="./js/script.js"></script>
+  <script src="./js/render.js"></script>
+  <script>
+
+        var dropdownButton = document.getElementById('dropDownButton');
+        var dropdownContent = document.getElementById('characterList');
+
+        dropdownButton.addEventListener('click', function() {
+            if (dropdownContent.style.display === 'none' || dropdownContent.style.display === '') {
+                dropdownContent.style.display = 'block';
+            } else {
+                dropdownContent.style.display = 'none';
+            }
+        });
+
+</script>
+
+
+
+</body>

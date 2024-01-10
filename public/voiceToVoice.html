@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" type="text/css" href="./styles/chooseCharacter.css">
+        <link rel="stylesheet" type="text/css" href="./styles/voiceToVoice.css">
+        <link rel="stylesheet" type="text/css" href="./styles/styles.css">
+        <title>AI Chat Bot Landing Page</title>
+    </head>
+
+    <body class="white">
+        <header class="light-grey flex">
+            <figure class="flex">
+                <!-- <img src="./img/IMG_2610.jpg" alt="A head picture of Josh Torres" width="100%"> -->
+                <h1 class="box center">SunFleur</h1>
+            </figure>
+            <nav class="spacing">
+                <a href="index.html">About</a>
+                <!-- <a href="#work">Main Page</a>
+                <a href="#contact">Contact Me</a> -->
+            </nav>
+        </header>
+ 
+        <main id="chooseCharacter">
+            <section class="Portfolio">
+                <div>
+                    <h1 class="head-color">AI ChatBot</h1>
+                </div>
+            </section>
+            <section class="alignVoiceButton">
+                <div class="section padding alignButton" id="work">
+                    <p class="alignPTags"></p>
+                    <button class="voiceToVoiceButton" id="voiceToVoiceButton"></button>
+                    </div>
+                    <div class="textFromTop">
+                        <h4>Hold to activate</h4>
+                    </div>
+            </section>
+
+        </main>
+
+        <script>
+
+                const voiceToVoiceButton = document.getElementById("voiceToVoiceButton");
+                console.log(voiceToVoiceButton)
+                let isMouseDown = false;
+                let intervalId = null;
+                let colorToggle = false;
+
+
+
+
+
+
+            voiceToVoiceButton.addEventListener('mousedown', async (event) => {
+                console.log("voice recording started")
+                isMouseDown = true;
+                toggleAlternateStyles();
+                intervalId = setInterval(() => {
+                    toggleAlternateStyles();
+                }, 1100); // Change colors every 1 second
+            });
+
+
+
+
+            voiceToVoiceButton.addEventListener('mouseup', () => {
+                console.log("voice recording ended")
+                isMouseDown = false;
+                clearInterval(intervalId);
+                resetColors();
+            });
+
+
+
+
+
+
+            function toggleAlternateStyles() {
+                const alignPTags = document.querySelectorAll(".alignPTags");
+                const voiceToVoiceButton = document.querySelectorAll(".voiceToVoiceButton");
+
+                colorToggle = !colorToggle; // Toggle between true and false
+
+                alignPTags.forEach((element, index) => {
+                    if (colorToggle) {
+                        element.classList.add('alternate1');
+
+                    } else {
+                        element.classList.remove('alternate1');
+  
+                    }
+                });
+
+                voiceToVoiceButton.forEach((element, index) => {
+                    if (colorToggle) {
+                        element.classList.add('alternate2');
+
+                    } else {
+                        element.classList.remove('alternate2');
+
+                    }
+                });
+            }
+
+
+
+            
+            function resetColors() {
+                const alignPTags = document.querySelectorAll(".alignPTags");
+                const voiceToVoiceButton = document.querySelectorAll(".voiceToVoiceButton");
+
+                alignPTags.forEach((element) => {
+                    element.classList.remove('alternate1', 'alternate2');
+                    element.classList.add("voiceToVoiceButtonLoad");
+                    element.classList.add("voiceToVoiceButtonLoad--loading");
+                    setTimeout(function(){
+                        element.classList.remove("voiceToVoiceButtonLoad--loading");
+                    },3000)
+                });
+
+                voiceToVoiceButton.forEach((element) => {
+                    element.classList.remove('alternate1', 'alternate2');
+
+                });
+                
+
+
+                  
+            }
+
+
+        </script>
+    </body>
+
+</html>
