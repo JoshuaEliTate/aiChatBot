@@ -34,6 +34,7 @@ let mediaRecorder;
 let recordedChunks = [];
 let promptValue = ''
 let nameValue = "AI"
+let textCompletionDone = true
 const btn = document.querySelector(".aiButton1");
 var sendData=document.querySelector("#sendData");
 var clearCache=document.querySelector("#clearCache");
@@ -125,6 +126,9 @@ try {
 
 
 function sendMessage() {
+  // if(textCompletionDone == true){
+
+  
 const message = userInput.value.trim();
 
 // Check if the message is not empty
@@ -136,16 +140,30 @@ if (message !== "") {
   // Clear the textarea
   userInput.value = "";
 }
+// }
 }
+
 if (sendTextButton !== null) {
-sendTextButton.addEventListener("click", sendMessage);
+
+sendTextButton.addEventListener("click", function (){
+  if(textCompletionDone == true){
+
+  sendMessage()
+  textCompletionDone =false
+  }
+} );
 }
 // Event listener for the "Enter" key press in the textarea
 if (userInput !== null) {
 userInput.addEventListener("keydown", function (event) {
+  if(textCompletionDone == true){
 if (event.key === "Enter" && !event.shiftKey) {
+  console.log(textCompletionDone)
+    textCompletionDone = false
+
   event.preventDefault(); // Prevent the default behavior of the "Enter" key in a textarea
   sendMessage(); // Call the sendMessage function
+  }
 }
 });
 }
@@ -371,7 +389,12 @@ return `${Date.now()}`;
 
 
 if (chatRecordButton !== null) {
+
 chatRecordButton.addEventListener('touchstart', async (event) => {
+  if(textCompletionDone == false){
+    return
+  } else {
+  textCompletionDone = false
 if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices.getUserMedia) {
 alert('MediaRecorder or getUserMedia is not supported on this browser. Please use a different browser.');
 return;
@@ -388,8 +411,11 @@ recordedChunks.push(e.data);
 };
 
 mediaRecorder.start();
+  }
 });
 }
+
+
 if (chatRecordButton !== null) {
 chatRecordButton.addEventListener('touchend', () => {
 if(!mediaRecorder){
@@ -424,7 +450,10 @@ mediaRecorder.stop();}
 
 
 if (chatRecordButton !== null) {
+
 chatRecordButton.addEventListener('mousedown', async (event) => {
+  if(textCompletionDone == true){
+  textCompletionDone = false
   if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices.getUserMedia) {
   alert('MediaRecorder or getUserMedia is not supported on this browser. Please use a different browser.');
   return;
@@ -442,6 +471,7 @@ chatRecordButton.addEventListener('mousedown', async (event) => {
   };
 
   mediaRecorder.start();
+}
   });
 }
 if (chatRecordButton !== null) {
@@ -489,7 +519,7 @@ if (chatRecordButton !== null) {
   playPauseBtn.classList.add("playPauseBtn--loading");
   div.appendChild(div2)
   scrollToLatestMessageWithDelay();
-
+  textCompletionDone = true
 
   fetch('/send-data', {
       method: 'POST',
@@ -614,7 +644,6 @@ if (chatRecordButton !== null) {
   containerDiv.appendChild(waveformImage); // if you want to go back //above js and change the appendchild to canvas
   containerDiv.appendChild(progressOverlay);
   div2.appendChild(containerDiv);
-
 
   waveformImage.addEventListener('click', function(event) {
       const rect = waveformImage.getBoundingClientRect();

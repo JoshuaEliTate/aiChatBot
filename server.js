@@ -122,6 +122,7 @@ if (req.file.mimetype == 'audio/webm'){
 } else{
   fileFormat = 'mp4'
 }
+console.log("line 125" + fileFormat)
 // console.log(fileFormat)
 // console.log(req.file.mimetype)
 // console.log('the file stuff for the users voice   ' + req.file.originalname)
